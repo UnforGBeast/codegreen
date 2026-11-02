@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Freshwater — see the water cost of your AI coding</title>
+<meta name="description" content="Freshwater is a floating 8-bit widget that turns the token logs your AI coding tools already keep into an estimated freshwater figure, shown as a pixel lake that dries up as you use it.">
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="assets/style.css">
+<meta property="og:title" content="Freshwater">
+<meta property="og:description" content="A pixel lake that dries up as your AI coding session uses tokens — an estimate of the freshwater behind it, running entirely on your own machine.">
+<meta property="og:image" content="images/lake-stages.png">
+<meta property="og:type" content="website">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="wrap">
+    <div class="brand"><span class="dot"></span> FRESHWATER</div>
+    <nav class="topnav">
+      <a href="#what-it-looks-like">Look</a>
+      <a href="#measured">Measured</a>
+      <a href="#estimate">Estimate</a>
+      <a href="#privacy">Privacy</a>
+      <a href="#install">Install</a>
+      <a href="https://github.com/UnforGBeast/codegreen">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="wrap">
+      <h1 class="pixel">FRESHWATER</h1>
+      <p class="tagline">A small floating 8-bit widget that makes the cost of AI coding visible. It reads the token counts your coding tools already log on this computer and shows an <strong>estimate</strong> of the freshwater used — this session, all time, and on average.</p>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="https://github.com/UnforGBeast/codegreen/releases">⬇ DOWNLOAD</a>
+        <a class="btn btn-secondary" href="https://github.com/UnforGBeast/codegreen">★ VIEW ON GITHUB</a>
+      </div>
+      <div class="hero-shot">
+        <img src="images/demo.gif" alt="The lake drying up over one coding session, with the session figure rising" width="330">
+      </div>
+    </div>
+  </section>
+
+  <section id="what-it-looks-like">
+    <div class="wrap">
+      <h2 class="pixel">WHAT IT LOOKS LIKE</h2>
+      <p class="lede">The lake compares a session against your own average. Early on the fish swim and jump, in the middle the water pulls back and the sky turns hazy, and under heavy use the fish are stranded and flop on the mud. They never die. The figures shown here are made-up samples.</p>
+      <div class="figure">
+        <img src="images/lake-stages.png" alt="Early, middle and heavy-use stages of the lake" width="700">
+      </div>
+      <p class="caption">Early · middle · heavy use — the same widget, three sessions.</p>
+      <div class="figure" style="margin-top:36px;">
+        <img src="images/info-panel.png" alt="The info panel, showing the water rate presets, the formula, the sources and each tool's status" width="300">
+      </div>
+      <p class="caption">Click the figures on the widget to open the info panel — water rate presets, the formula, the sources, and each tool's status.</p>
+    </div>
+  </section>
+
+  <section id="measured">
+    <div class="wrap">
+      <h2 class="pixel">WHAT IS MEASURED</h2>
+      <p class="lede">A tool shown as <strong>not measured</strong> adds nothing to any figure. The widget never guesses. If a log format changes and cannot be parsed, that tool is shown as not measured too.</p>
+      <table>
+        <thead>
+          <tr><th>Tool</th><th>Source</th><th>Status</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Claude Code <span style="color:var(--ink-dim)">(CLI and VS&nbsp;Code extension)</span></td>
+            <td><code>~/.claude/projects/**/*.jsonl</code></td>
+            <td class="status-measured">Measured</td>
+          </tr>
+          <tr>
+            <td>Codex</td>
+            <td><code>~/.codex/sessions/**/*.jsonl</code></td>
+            <td class="status-partial">Measured, for sessions that log an input/output split</td>
+          </tr>
+          <tr>
+            <td>Gemini CLI</td>
+            <td><code>~/.gemini/tmp/&lt;project&gt;/chats/**/*.jsonl</code> <span style="color:var(--ink-dim)">(honours <code>GEMINI_CLI_HOME</code>)</span></td>
+            <td class="status-partial">Measured, not yet checked against a real install; old single-file <code>.json</code> sessions not read</td>
+          </tr>
+          <tr>
+            <td>Antigravity</td>
+            <td><code>~/.gemini/antigravity/</code></td>
+            <td class="status-no">Not measured — no readable token counts</td>
+          </tr>
+          <tr>
+            <td>Claude Desktop chat</td>
+            <td>none found</td>
+            <td class="status-no">Not measured — no local logs</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="estimate">
+    <div class="wrap">
+      <h2 class="pixel">THE FIGURE IS AN ESTIMATE</h2>
+      <pre>weighted tokens = output x 1 + input x 0.1 + cache write x 0.1 + cache read x 0.001
+energy (Wh)     = weighted tokens / 1000 x 0.6
+water (mL)      = energy (Wh) x water rate (mL per Wh)</pre>
+      <ul class="notes">
+        <li>The token weights are judgment calls, not sourced figures. Cached tokens are about 98% of Claude Code volume, so counting them in full would swamp everything else.</li>
+        <li>0.6&nbsp;Wh per 1,000 tokens comes from Epoch AI's estimate of about 0.3&nbsp;Wh per ChatGPT query, assuming a 500-token response.</li>
+        <li>The water rate has three presets, chosen in the info panel, following the formula in Li et al. (arXiv 2304.03271 v5): <code>water = energy x [cooling water + PUE x electricity water]</code>. <strong>Low</strong> is 1.08&nbsp;mL/Wh (cooling water only, from Google's per-prompt figures). <strong>Default</strong> is 4.23&nbsp;mL/Wh (cooling + electricity water, the U.S. average in the paper). <strong>High</strong> is 5.64&nbsp;mL/Wh (the same, with the paper's higher electricity factor).</li>
+        <li>This is a rough, order-of-magnitude figure, and the uncertainty runs in both directions. <a href="https://github.com/UnforGBeast/codegreen/blob/main/docs/methodology.md">docs/methodology.md</a> has the sources, a worked example, what could be wrong, and what is left out.</li>
+        <li>The lake level compares a session against your own average: an average session leaves the lake half gone. Until you have 5 sessions it uses a baseline of 146&nbsp;Wh per session (the mean of the author's own logs), so the lake looks the same whichever rate you choose.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="privacy">
+    <div class="wrap">
+      <h2 class="pixel">PRIVACY</h2>
+      <p class="lede" style="margin-bottom:0;">Nothing leaves your computer. The widget makes no network calls, has no accounts or telemetry, and bundles its own font. It reads only usage numbers and timestamps from the logs and never stores or shows conversation text. Per-session totals are kept in <code>~/.freshwater/ledger.json</code> so that all-time figures survive tools deleting old logs. Settings are in <code>~/.freshwater/settings.json</code>. The widget never limits or blocks token use.</p>
+    </div>
+  </section>
+
+  <section id="install">
+    <div class="wrap">
+      <h2 class="pixel">INSTALL</h2>
+      <p class="lede">You need Node.js 22 or newer. Windows, macOS and Linux are supported.</p>
+      <div class="install-grid">
+        <div class="card">
+          <h3>RUN FROM SOURCE</h3>
+          <pre>npm install
+npm start</pre>
+          <p style="color:var(--ink-dim); font-size:14px; margin-top:12px;">To build an installer for the system you're on: <code>npm run dist</code> (Windows), <code>npm run dist:mac</code>, or <code>npm run dist:linux</code>. Output lands in <code>dist/</code>.</p>
+        </div>
+        <div class="card">
+          <h3>PLATFORM NOTES</h3>
+          <ul>
+            <li><strong style="color:var(--ink)">Windows</strong> is the most tested platform.</li>
+            <li><strong style="color:var(--ink)">macOS</strong> hides the Dock icon and floats the widget over fullscreen apps. The build is unsigned, so macOS will ask you to allow it.</li>
+            <li><strong style="color:var(--ink)">Linux</strong> needs a compositor for the transparent window. "Start at login" isn't offered — Electron can't set it there.</li>
+          </ul>
+        </div>
+      </div>
+      <p style="margin-top:28px; color:var(--ink-dim);">Right-click the widget for Info, Start at login (installed Windows/macOS builds), and Quit. Click the figures to open the info panel.</p>
+      <p style="margin-top:12px;"><a href="https://github.com/UnforGBeast/codegreen/releases">Browse installers on the Releases page →</a></p>
+      <p style="margin-top:4px; color:var(--ink-dim); font-size:13px;">Releases are published only from signed builds, so if a release isn't there yet, that's why.</p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="fish">· :·°¤ø,¸¸,ø¤°·˚ ─ they never die ─ ˚·°¤ø,¸¸,ø¤°·: ·</div>
+    <p>
+      <a href="https://github.com/UnforGBeast/codegreen">github.com/UnforGBeast/codegreen</a>
+      · MIT License
+      · <a href="https://github.com/UnforGBeast/codegreen/blob/main/docs/methodology.md">Methodology</a>
+      · <a href="https://github.com/UnforGBeast/codegreen/issues">Issues</a>
+    </p>
+  </div>
+</footer>
+
+</body>
+</html>
