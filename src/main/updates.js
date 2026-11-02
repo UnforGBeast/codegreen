@@ -25,8 +25,8 @@ function createUpdates({ updater, isPackaged, timers = { setInterval, clearInter
   function setAuto(enabled) {
     if (!available) return;
     if (enabled && !timer) {
-      checkNow();
-      timer = timers.setInterval(() => checkNow(), CHECK_EVERY_MS);
+      void checkNow(); // never rejects, so nothing to catch
+      timer = timers.setInterval(() => void checkNow(), CHECK_EVERY_MS);
       if (timer && typeof timer.unref === 'function') timer.unref();
     } else if (!enabled && timer) {
       timers.clearInterval(timer);

@@ -8,7 +8,8 @@
     "test": "node --test \"test/*.test.js\"",
     "dist": "electron-builder --win",
     "dist:mac": "electron-builder --mac",
-    "dist:linux": "electron-builder --linux"
+    "dist:linux": "electron-builder --linux",
+    "builder": "electron-builder"
   },
   "keywords": [],
   "author": "UnforGBeast <atahusain123@gmail.com>",
