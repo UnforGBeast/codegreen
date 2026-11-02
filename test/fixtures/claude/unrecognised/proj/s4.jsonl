@@ -1,0 +1,2 @@
+{"sessionId":"s4","timestamp":"2026-11-02T13:00:00.000Z","message":{"id":"m30","usage":{"tokens":{"in":1,"out":2}}}}
+{"sessionId":"s4","timestamp":"2026-11-02T13:00:01.000Z","message":{"id":"m31","usage":{"prompt":"n/a"}}}

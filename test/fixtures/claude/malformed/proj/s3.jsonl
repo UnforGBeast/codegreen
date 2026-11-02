@@ -1,0 +1,4 @@
+{"sessionId":"s3","timestamp":"2026-11-02T12:00:00.000Z","message":{"id":"m20","usage":{"input_tokens":1,"output_tokens":1,"cache_read_input_tokens":1,"cache_creation_input_tokens":1}}}
+{"sessionId":"s3","message":{"id":"bad","usage": {"input_tokens":
+not json at all "usage"
+{"sessionId":"s3","timestamp":"2026-11-02T12:00:09.000Z","message":{"id":"m21","usage":{"input_tokens":2,"output_tokens":2,"cache_read_input_tokens":2,"cache_creation_input_tokens":2}}}
