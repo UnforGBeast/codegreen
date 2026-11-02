@@ -1,7 +1,6 @@
-const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
-const { createReader } = require('./jsonlReader');
+const { createReader, findJsonl } = require('./jsonlReader');
 
 const FIELDS = {
   input: 'input_tokens',
@@ -9,21 +8,6 @@ const FIELDS = {
   cacheRead: 'cache_read_input_tokens',
   cacheWrite: 'cache_creation_input_tokens',
 };
-
-function findJsonl(dir, out) {
-  let entries;
-  try {
-    entries = fs.readdirSync(dir, { withFileTypes: true });
-  } catch {
-    return out;
-  }
-  for (const e of entries) {
-    const full = path.join(dir, e.name);
-    if (e.isDirectory()) findJsonl(full, out);
-    else if (e.isFile() && e.name.endsWith('.jsonl')) out.push(full);
-  }
-  return out;
-}
 
 function createClaudeCodeAdapter(rootDir = path.join(os.homedir(), '.claude', 'projects')) {
   const reader = createReader();
@@ -76,7 +60,7 @@ function createClaudeCodeAdapter(rootDir = path.join(os.homedir(), '.claude', 'p
 
   function scan() {
     try {
-      for (const file of findJsonl(rootDir, [])) {
+      for (const file of findJsonl(rootDir)) {
         for (const line of reader.readNew(file)) ingest(line);
       }
       if (unrecognised > 0 && recognised === 0) return { status: 'not-measured', sessions: [] };

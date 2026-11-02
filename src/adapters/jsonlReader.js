@@ -1,4 +1,5 @@
 const fs = require('node:fs');
+const path = require('node:path');
 
 // Incremental line reader. Remembers, per file, the byte offset just past the last
 // complete line, so a partial trailing line is picked up whole on a later read.
@@ -40,4 +41,19 @@ function createReader() {
   return { readNew };
 }
 
-module.exports = { createReader };
+function findJsonl(dir, out = []) {
+  let entries;
+  try {
+    entries = fs.readdirSync(dir, { withFileTypes: true });
+  } catch {
+    return out;
+  }
+  for (const e of entries) {
+    const full = path.join(dir, e.name);
+    if (e.isDirectory()) findJsonl(full, out);
+    else if (e.isFile() && e.name.endsWith('.jsonl')) out.push(full);
+  }
+  return out;
+}
+
+module.exports = { createReader, findJsonl };
