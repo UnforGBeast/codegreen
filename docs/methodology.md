@@ -119,7 +119,14 @@ The lake compares a session against **your own average**:
 level = min(1, session water / (2 x average water per session))
 ```
 
-So an average session leaves the lake half gone, and a session twice your average empties it. Until you have 5 sessions it uses a baseline of about 78 Wh of energy per session (140 mL at the original 1.8 mL per Wh), turned into millilitres at the rate you chose, so the lake looks the same whichever preset you pick. That baseline was taken from an early count that overstated the number of sessions, and is tracked for revision in [#10](https://github.com/UnforGBeast/codegreen/issues/10).
+So an average session leaves the lake half gone, and a session twice your average empties it.
+
+Until you have 5 sessions it uses a baseline of **146 Wh of energy per session** in place of your average, turned into millilitres at the rate you chose, so the lake looks the same whichever preset you pick. 146 Wh is the mean over 66 sessions on the author's Claude Code and Codex logs. Two things to know about it:
+
+- It comes from one heavy user, so it is a starting guess for everyone else, and your own average takes over after 5 sessions.
+- Session sizes are very uneven. On those logs the median session was 80 Wh and the 5 largest sessions made up 35% of all energy. Because the lake is measured against the mean, a typical session usually leaves it less than half gone, and only unusually long sessions drain it.
+
+When your fifth session completes, the lake switches from this baseline to your own average, which can make the same session look different. Smoothing that hand-over is tracked in [#33](https://github.com/UnforGBeast/codegreen/issues/33).
 
 | Level | What you see |
 |---|---|

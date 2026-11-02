@@ -146,3 +146,17 @@ test('the early lake level does not depend on the rate preset', () => {
   assert.ok(levels[0] > 0 && levels[0] < 1);
   for (const l of levels) assert.ok(Math.abs(l - levels[0]) < 1e-9, `levels differ: ${levels}`);
 });
+
+test('a session the size of the baseline leaves the lake half gone at every preset', () => {
+  // output tokens weigh 1 and 0.6 Wh per 1,000 weighted tokens, so this many output tokens is BASELINE_WH of energy
+  const output = (BASELINE_WH / 0.6) * 1000;
+  const a = fake('claude-code', 'Claude Code', { status: 'measured', sessions: [rec('claude-code', 'a', output, 5)] });
+  for (const rate of Object.values(RATES)) {
+    const level = setup([a], 1_000_000, rate).tracker.tick().level;
+    assert.ok(Math.abs(level - 0.5) < 1e-9, `level ${level} at rate ${rate}`);
+  }
+});
+
+test('the baseline matches the author logs: mean 146 Wh per session', () => {
+  assert.equal(BASELINE_WH, 146);
+});
