@@ -12,9 +12,9 @@
 
 <h2>Water rate</h2>
 <form id="rates">
-  <label><input type="radio" name="rate" value="low"><span><b>Low</b> &middot; 1.08 mL per Wh</span><small>Data-centre cooling water. Google's reported 0.26 mL and 0.24 Wh per median Gemini prompt. It leaves out water used to generate the electricity.</small></label>
-  <label><input type="radio" name="rate" value="default"><span><b>Default</b> &middot; 1.8 mL per Wh</span><small>Water used to generate the electricity: the U.S. national average cited in Li et al., arXiv 2304.03271 (v1).</small></label>
-  <label><input type="radio" name="rate" value="high"><span><b>High</b> &middot; 3.8 mL per Wh</span><small>Data-centre cooling water at an average data centre, from the same preprint (v1).</small></label>
+  <label><input type="radio" name="rate" value="low"><span><b>Low</b> &middot; <span data-rate="low"></span> mL per Wh</span><small>Cooling water only. Google's reported 0.26 mL and 0.24 Wh per median Gemini prompt. It leaves out the water used to generate the electricity.</small></label>
+  <label><input type="radio" name="rate" value="default"><span><b>Default</b> &middot; <span data-rate="default"></span> mL per Wh</span><small>Cooling plus electricity water, U.S. average: 0.55 + 1.17 x 3.142 (Li et al., arXiv 2304.03271, v5).</small></label>
+  <label><input type="radio" name="rate" value="high"><span><b>High</b> &middot; <span data-rate="high"></span> mL per Wh</span><small>Cooling plus electricity water with the higher electricity factor of 4.35 L/kWh that the same paper cites: 0.55 + 1.17 x 4.35.</small></label>
 </form>
 
 <h2>How it is calculated</h2>
@@ -29,11 +29,11 @@ water (mL)  = energy (Wh) x water rate</pre>
 <h2>Sources</h2>
 <ul>
   <li>Epoch AI, "How much energy does ChatGPT use?"</li>
-  <li>Li et al., "Making AI Less Thirsty", arXiv 2304.03271, version 1</li>
+  <li>Li et al., "Making AI Less Thirsty", arXiv 2304.03271, version 5</li>
   <li>Google's published per-prompt figures for a median Gemini text prompt</li>
 </ul>
 
-<p>The three rates count different parts of the water cost, so read them as three plausible points, not a clean scale. The full methodology and its caveats are in <b>docs/methodology.md</b> in the project repository.</p>
+<p>Low counts cooling water only. Default and High count cooling plus electricity water. The full methodology and its caveats are in <b>docs/methodology.md</b> in the project repository.</p>
 
 <h2>Tools</h2>
 <ul id="tools"></ul>

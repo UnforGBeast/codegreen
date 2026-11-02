@@ -26,5 +26,9 @@ ratesForm.addEventListener('change', (e) => {
   if (e.target.name === 'rate') window.freshwater.setRatePreset(e.target.value);
 });
 
-window.freshwater.getRates().then((r) => selectPreset(r.preset));
+window.freshwater.getRates().then((r) => {
+  // the numbers shown come from the same table the calculation uses, so they cannot drift
+  for (const el of document.querySelectorAll('[data-rate]')) el.textContent = String(r.rates[el.dataset.rate]);
+  selectPreset(r.preset);
+});
 window.freshwater.onSnapshot((s) => renderTools(s.tools));

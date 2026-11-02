@@ -5,7 +5,7 @@ const os = require('node:os');
 const path = require('node:path');
 const { createTracker, ACTIVE_MS } = require('../src/core/tracker');
 const { waterMl, RATES } = require('../src/core/water');
-const { lakeLevel } = require('../src/core/lake');
+const { lakeLevel, BASELINE_WH } = require('../src/core/lake');
 
 const tmp = () => path.join(fs.mkdtempSync(path.join(os.tmpdir(), 'fw-tracker-')), 'ledger.json');
 const usage = (output) => ({ input: 0, output, cacheRead: 0, cacheWrite: 0 });
@@ -66,7 +66,7 @@ test('average is all-time water over session count', () => {
 test('level follows the lake formula', () => {
   const a = fake('claude-code', 'Claude Code', { status: 'measured', sessions: [rec('claude-code', 'a', 1000, 5)] });
   const snap = setup([a]).tracker.tick();
-  assert.equal(snap.level, lakeLevel(snap.session.ml, snap.averageMl, 1));
+  assert.equal(snap.level, lakeLevel(snap.session.ml, snap.averageMl, 1, BASELINE_WH * RATES.default));
 });
 
 test('pruned session stays in all-time', () => {
@@ -138,4 +138,11 @@ test('a failing ledger save still yields a snapshot and is retried', () => {
   fs.rmSync(blocker);
   tracker.tick(); // the folder is now creatable: the unsaved ledger is written without any new usage
   assert.ok(fs.existsSync(ledgerPath));
+});
+
+test('the early lake level does not depend on the rate preset', () => {
+  const a = fake('claude-code', 'Claude Code', { status: 'measured', sessions: [rec('claude-code', 'a', 50000, 5)] });
+  const levels = Object.values(RATES).map((rate) => setup([a], 1_000_000, rate).tracker.tick().level);
+  assert.ok(levels[0] > 0 && levels[0] < 1);
+  for (const l of levels) assert.ok(Math.abs(l - levels[0]) < 1e-9, `levels differ: ${levels}`);
 });
