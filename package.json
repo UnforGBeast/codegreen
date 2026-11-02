@@ -6,10 +6,12 @@
   "scripts": {
     "start": "electron .",
     "test": "node --test \"test/*.test.js\"",
-    "dist": "electron-builder --win"
+    "dist": "electron-builder --win",
+    "dist:mac": "electron-builder --mac",
+    "dist:linux": "electron-builder --linux"
   },
   "keywords": [],
-  "author": "",
+  "author": "UnforGBeast <atahusain123@gmail.com>",
   "license": "ISC",
   "type": "commonjs",
   "devDependencies": {
@@ -33,6 +35,29 @@
     "nsis": {
       "oneClick": true,
       "perMachine": false
+    },
+    "mac": {
+      "target": [
+        "dmg"
+      ],
+      "category": "public.app-category.developer-tools",
+      "identity": null
+    },
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb"
+      ],
+      "category": "Utility",
+      "maintainer": "UnforGBeast <atahusain123@gmail.com>"
     }
+  },
+  "homepage": "https://github.com/UnforGBeast/codegreen",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/UnforGBeast/codegreen.git"
+  },
+  "engines": {
+    "node": ">=22"
   }
 }

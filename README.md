@@ -6,16 +6,23 @@ The widget stays on top of your other windows, can be dragged anywhere, and reme
 
 ## Install
 
-You need Windows and Node.js.
+You need Node.js 22 or newer. Windows, macOS and Linux are supported.
 
 ```
 npm install
 npm start
 ```
 
-To build an installer, run `npm run dist`. The installer is written to `dist/`.
+To build an installer for the system you are on, run `npm run dist` (Windows), `npm run dist:mac` (macOS) or `npm run dist:linux` (Linux). The result is written to `dist/`.
 
-Right-click the widget for Info, Start with Windows, and Quit. Click the figures to open the info panel.
+Platform notes:
+
+- **Windows** is the most tested platform.
+- **macOS** hides the Dock icon and floats the widget over fullscreen apps. The build is unsigned, so macOS will ask you to allow it.
+- **Linux** needs a compositor for the transparent window. "Start at login" is not offered because Electron cannot set it there.
+- Not yet checked by eye on macOS and Linux: dragging, and the right-click menu on the lake picture.
+
+Right-click the widget for Info, Start at login (installed Windows and macOS builds only), and Quit. Click the figures to open the info panel.
 
 ## What is measured
 
