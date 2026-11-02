@@ -9,14 +9,12 @@ function createReader() {
   function readNew(filePath) {
     let fd;
     try {
-      fd = fs.openSync(filePath, 'r');
-      const size = fs.fstatSync(fd).size;
       let offset = offsets.get(filePath) || 0;
+      // cheap stat first: an unchanged file is never opened
+      const size = fs.statSync(filePath).size;
+      if (size === offset) return [];
       if (size < offset) offset = 0; // shrunk or replaced: start over
-      if (size === offset) {
-        offsets.set(filePath, offset);
-        return [];
-      }
+      fd = fs.openSync(filePath, 'r');
       const buf = Buffer.alloc(size - offset);
       const read = fs.readSync(fd, buf, 0, buf.length, offset);
       const end = buf.subarray(0, read).lastIndexOf(0x0a);
@@ -56,4 +54,20 @@ function findJsonl(dir, out = []) {
   return out;
 }
 
-module.exports = { createReader, findJsonl };
+// Caches the file list so the full directory walk runs at most once per interval;
+// in between, callers only touch the files they already know.
+function createLister(rootDir, { intervalMs = 30000, now = Date.now } = {}) {
+  let files = [];
+  let walkedAt = null;
+  return {
+    list() {
+      if (walkedAt === null || now() - walkedAt >= intervalMs) {
+        files = findJsonl(rootDir);
+        walkedAt = now();
+      }
+      return files;
+    },
+  };
+}
+
+module.exports = { createReader, createLister, findJsonl };

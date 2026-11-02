@@ -1,6 +1,6 @@
 const os = require('node:os');
 const path = require('node:path');
-const { createReader, findJsonl } = require('./jsonlReader');
+const { createReader, createLister } = require('./jsonlReader');
 
 const FIELDS = {
   input: 'input_tokens',
@@ -11,6 +11,7 @@ const FIELDS = {
 
 function createClaudeCodeAdapter(rootDir = path.join(os.homedir(), '.claude', 'projects')) {
   const reader = createReader();
+  const lister = createLister(rootDir);
   const seenMessages = new Set(); // message.id repeats across lines and files
   const sessions = new Map();
   let recognised = 0;
@@ -60,7 +61,7 @@ function createClaudeCodeAdapter(rootDir = path.join(os.homedir(), '.claude', 'p
 
   function scan() {
     try {
-      for (const file of findJsonl(rootDir)) {
+      for (const file of lister.list()) {
         for (const line of reader.readNew(file)) ingest(line);
       }
       if (unrecognised > 0 && recognised === 0) return { status: 'not-measured', sessions: [] };

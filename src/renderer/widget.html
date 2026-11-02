@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self' data:">
+<title>Freshwater</title>
+<link rel="stylesheet" href="widget.css">
+</head>
+<body>
+<div class="wgt">
+  <canvas id="lake" width="64" height="48"></canvas>
+  <div class="row head"><b id="tool">WAITING</b><i>EST.</i></div>
+  <div class="row" id="r-session"><b>SESSION</b><span id="session">0 mL</span></div>
+  <div class="row" id="r-all"><b>ALL TIME</b><span id="all">0 mL</span></div>
+  <div class="row" id="r-avg"><b>AVERAGE</b><span id="avg">0 mL</span></div>
+</div>
+<script src="format.js"></script>
+<script src="scene.js"></script>
+<script src="widget.js"></script>
+</body>
+</html>

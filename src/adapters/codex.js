@@ -1,11 +1,12 @@
 const os = require('node:os');
 const path = require('node:path');
-const { createReader, findJsonl } = require('./jsonlReader');
+const { createReader, createLister } = require('./jsonlReader');
 
 const isNum = (v) => typeof v === 'number' && Number.isFinite(v);
 
 function createCodexAdapter(rootDir = path.join(os.homedir(), '.codex', 'sessions')) {
   const reader = createReader();
+  const lister = createLister(rootDir);
   const files = new Map(); // path -> { last, startedAt, lastActiveAt }
   let recognised = 0;
   let unrecognised = 0;
@@ -46,7 +47,7 @@ function createCodexAdapter(rootDir = path.join(os.homedir(), '.codex', 'session
 
   function scan() {
     try {
-      for (const file of findJsonl(rootDir)) {
+      for (const file of lister.list()) {
         for (const line of reader.readNew(file)) ingest(file, line);
       }
       if (unrecognised > 0 && recognised === 0) return { status: 'not-measured', sessions: [] };

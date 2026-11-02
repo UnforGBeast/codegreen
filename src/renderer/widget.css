@@ -1,0 +1,27 @@
+@font-face {
+  font-family: 'Press Start 2P';
+  src: url('PressStart2P-Regular.ttf');
+}
+
+html, body { margin: 0; background: transparent; overflow: hidden; user-select: none; }
+body { padding: 8px 14px 14px 8px; }
+
+.wgt {
+  width: 192px;
+  padding: 6px;
+  background: #0a0f1f;
+  color: #d8f0ff;
+  font-family: 'Press Start 2P', ui-monospace, Consolas, monospace;
+  box-shadow: 0 -4px 0 #8fd3ff, 0 4px 0 #8fd3ff, -4px 0 0 #8fd3ff, 4px 0 0 #8fd3ff, 8px 10px 0 rgba(0, 0, 0, 0.45);
+}
+
+/* only the scene drags: a drag region swallows clicks, so the rows stay no-drag */
+canvas { display: block; width: 192px; height: 144px; image-rendering: pixelated; -webkit-app-region: drag; }
+
+.row { display: flex; justify-content: space-between; font-size: 8px; line-height: 1; padding: 6px 2px 0; -webkit-app-region: no-drag; cursor: pointer; }
+.row b { font-weight: normal; color: #7fb2d9; }
+.row span { color: #ffffff; }
+.row.head { cursor: default; }
+.row.head b { color: #4f7ea3; }
+.row.head i { font-style: normal; color: #ffd84a; }
+.row:last-child { padding-bottom: 4px; }
