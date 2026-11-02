@@ -12,9 +12,9 @@
 
 <h2>Water rate</h2>
 <form id="rates">
-  <label><input type="radio" name="rate" value="low"><span><b>Low</b> &middot; 1.08 mL per Wh</span><small>Google's reported 0.26 mL and 0.24 Wh per median Gemini prompt. Critics say it leaves out indirect water.</small></label>
-  <label><input type="radio" name="rate" value="default"><span><b>Default</b> &middot; 1.8 mL per Wh</span><small>U.S. national average, as cited in Li et al., arXiv 2304.03271 (v1).</small></label>
-  <label><input type="radio" name="rate" value="high"><span><b>High</b> &middot; 3.8 mL per Wh</span><small>Average on-site efficiency for a comparison training site in the same preprint.</small></label>
+  <label><input type="radio" name="rate" value="low"><span><b>Low</b> &middot; 1.08 mL per Wh</span><small>Data-centre cooling water. Google's reported 0.26 mL and 0.24 Wh per median Gemini prompt. It leaves out water used to generate the electricity.</small></label>
+  <label><input type="radio" name="rate" value="default"><span><b>Default</b> &middot; 1.8 mL per Wh</span><small>Water used to generate the electricity: the U.S. national average cited in Li et al., arXiv 2304.03271 (v1).</small></label>
+  <label><input type="radio" name="rate" value="high"><span><b>High</b> &middot; 3.8 mL per Wh</span><small>Data-centre cooling water at an average data centre, from the same preprint (v1).</small></label>
 </form>
 
 <h2>How it is calculated</h2>
@@ -32,6 +32,8 @@ water (mL)  = energy (Wh) x water rate</pre>
   <li>Li et al., "Making AI Less Thirsty", arXiv 2304.03271, version 1</li>
   <li>Google's published per-prompt figures for a median Gemini text prompt</li>
 </ul>
+
+<p>The three rates count different parts of the water cost, so read them as three plausible points, not a clean scale. The full methodology and its caveats are in <b>docs/methodology.md</b> in the project repository.</p>
 
 <h2>Tools</h2>
 <ul id="tools"></ul>
