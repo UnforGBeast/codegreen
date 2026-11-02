@@ -42,6 +42,7 @@ Right-click the widget for Info, Start at login (installed Windows and macOS bui
 |---|---|---|
 | Claude Code (CLI and VS Code extension) | `~/.claude/projects/**/*.jsonl` | Measured |
 | Codex | `~/.codex/sessions/**/*.jsonl` | Measured, for sessions that log an input and output split |
+| Gemini CLI | `~/.gemini/tmp/<project>/chats/**/*.jsonl` (honours `GEMINI_CLI_HOME`) | Measured. Built from the CLI's own source and test fixtures, but not yet checked against a real install; sessions saved in the old single-file `.json` format are not read |
 | Antigravity | `~/.gemini/antigravity/` | Not measured: no readable token counts |
 | Claude Desktop chat | none found | Not measured: no local logs |
 

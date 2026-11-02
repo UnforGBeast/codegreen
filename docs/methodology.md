@@ -134,6 +134,7 @@ A session counts as active for 5 minutes after its last logged activity. When no
 - Only usage numbers and timestamps are read. Conversation text is never stored or shown.
 - Claude Code repeats the same message id across log lines and files, so tokens are counted once per message id. Without this, totals were badly inflated: on the author's logs 12,519 of about 22,000 usage lines were duplicates.
 - Codex logs a running total, so the last value in a session is used, never a sum.
+- Gemini CLI records usage on each response and appends the message again when its tokens are attached, so the last copy of each message id is used. Cached tokens are taken out of the prompt count, thinking tokens count as output, and tool-use prompt tokens count as input. Subagent chats are added to their parent session. Tokens from rewound messages stay counted, because they were really spent. This reading comes from the CLI's source code, not from a real recorded file yet.
 - Half-written lines are picked up whole on the next read. Unparseable formats show the tool as not measured.
 
 ## Disagree with a number?

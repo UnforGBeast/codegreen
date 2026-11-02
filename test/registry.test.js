@@ -5,7 +5,7 @@ const { createAdapters, guard } = require('../src/adapters/index');
 test('registry lists all four tools', () => {
   assert.deepEqual(
     createAdapters().map((a) => a.label),
-    ['Claude Code', 'Codex', 'Antigravity', 'Claude Desktop chat']
+    ['Claude Code', 'Codex', 'Gemini CLI', 'Antigravity', 'Claude Desktop chat']
   );
 });
 

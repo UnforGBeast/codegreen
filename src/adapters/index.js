@@ -1,5 +1,6 @@
 const { createClaudeCodeAdapter } = require('./claudeCode');
 const { createCodexAdapter } = require('./codex');
+const { createGeminiCliAdapter } = require('./geminiCli');
 
 const NOT_MEASURED = { status: 'not-measured', sessions: [] };
 
@@ -31,6 +32,7 @@ function createAdapters() {
   return [
     guard(createClaudeCodeAdapter()),
     guard(createCodexAdapter()),
+    guard(createGeminiCliAdapter()),
     notMeasured('antigravity', 'Antigravity'),
     notMeasured('claude-desktop-chat', 'Claude Desktop chat'),
   ];
