@@ -12,7 +12,7 @@
   },
   "keywords": [],
   "author": "UnforGBeast <atahusain123@gmail.com>",
-  "license": "ISC",
+  "license": "MIT",
   "type": "commonjs",
   "devDependencies": {
     "electron": "^45.2.1",

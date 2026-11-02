@@ -26,7 +26,8 @@ function sync() {
     clearInterval(timer);
     timer = null;
   }
-  if (!animate) draw();
+  // draw now in every case, so the lake never lags the numbers by a timer tick
+  draw();
 }
 
 function render(s) {

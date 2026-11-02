@@ -4,6 +4,18 @@ A small floating 8-bit widget that makes the cost of AI coding visible. It reads
 
 The widget stays on top of your other windows, can be dragged anywhere, and remembers where you left it.
 
+<p align="center"><img src="docs/images/demo.gif" alt="The lake drying up over one coding session, with the session figure rising" width="330"></p>
+
+## What it looks like
+
+The lake compares a session against your own average. Early on the fish swim and jump, in the middle the water pulls back and the sky turns hazy, and under heavy use the fish are stranded and flop on the mud. They never die. The figures shown here are made-up samples.
+
+<p align="center"><img src="docs/images/lake-stages.png" alt="Early, middle and heavy-use stages of the lake" width="700"></p>
+
+Click the figures for the info panel, with the water rate presets, the formula, the sources and each tool's status:
+
+<p align="center"><img src="docs/images/info-panel.png" alt="The info panel" width="360"></p>
+
 ## Install
 
 You need Node.js 22 or newer. Windows, macOS and Linux are supported.
@@ -64,3 +76,7 @@ npm test
 The calculation and log parsing live in `src/core` and `src/adapters` and are tested with plain Node, with no Electron needed. Fixtures contain no real conversation text. To add a tool, write an adapter with a `scan()` that returns `{status, sessions}` and register it in `src/adapters/index.js`.
 
 The Press Start 2P font is bundled under the SIL Open Font License; see `src/renderer/FONT-LICENSE.txt`.
+
+## License
+
+MIT, see [LICENSE](LICENSE).
