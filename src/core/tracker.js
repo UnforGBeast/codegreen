@@ -1,6 +1,6 @@
 const { loadLedger, saveLedger, mergeSessions } = require('./ledger');
 const { waterMl } = require('./water');
-const { lakeLevel } = require('./lake');
+const { lakeLevel, BASELINE_WH } = require('./lake');
 
 const ACTIVE_MS = 300000;
 
@@ -50,7 +50,7 @@ function createTracker({ adapters, ledgerPath, getRate, now }) {
         ml: waterMl(latest.usage, rate),
         active: now() - latest.lastActiveAt < ACTIVE_MS,
       };
-      level = lakeLevel(session.ml, averageMl, records.length);
+      level = lakeLevel(session.ml, averageMl, records.length, BASELINE_WH * rate);
     }
 
     return {

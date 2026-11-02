@@ -57,11 +57,11 @@ water (mL)      = energy (Wh) x water rate (mL per Wh)
 
 - The token weights are judgment calls, not sourced figures. Cached tokens are about 98% of Claude Code volume, so counting them in full would swamp everything else.
 - 0.6 Wh per 1,000 tokens comes from Epoch AI's estimate of about 0.3 Wh per ChatGPT query, which assumes a 500-token response.
-- The water rate has three presets, chosen in the info panel: **Low** 1.08 mL per Wh (Google's data-centre cooling water per prompt), **Default** 1.8 mL per Wh (water used to generate the electricity, the U.S. average cited in Li et al., arXiv 2304.03271 v1) and **High** 3.8 mL per Wh (cooling water at an average data centre, same preprint). They count different parts of the water cost, so they are three plausible points, not a clean scale.
+- The water rate has three presets, chosen in the info panel. They follow the formula in Li et al. (arXiv 2304.03271 v5), water = energy x [cooling water + PUE x electricity water]. **Low** is 1.08 mL per Wh: cooling water only, from Google's per-prompt figures. **Default** is 4.23 mL per Wh: cooling plus electricity water, the U.S. average in the paper. **High** is 5.64 mL per Wh: the same, with the higher electricity factor the paper cites.
 
 This is a rough, order-of-magnitude figure, and the uncertainty runs in both directions. [docs/methodology.md](docs/methodology.md) has the sources, a worked example, what could be wrong and what is left out.
 
-The lake level compares a session against your own average: an average session leaves the lake half gone. Until you have 5 sessions it uses a baseline of 140 mL.
+The lake level compares a session against your own average: an average session leaves the lake half gone. Until you have 5 sessions it uses a baseline of about 78 Wh per session, so the lake looks the same whichever rate you choose.
 
 ## Privacy
 
