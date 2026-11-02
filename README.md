@@ -62,7 +62,7 @@ water (mL)      = energy (Wh) x water rate (mL per Wh)
 
 This is a rough, order-of-magnitude figure, and the uncertainty runs in both directions. [docs/methodology.md](docs/methodology.md) has the sources, a worked example, what could be wrong and what is left out.
 
-The lake level compares a session against your own average: an average session leaves the lake half gone. Until you have 5 sessions it uses a baseline of about 78 Wh per session, so the lake looks the same whichever rate you choose.
+The lake level compares a session against your own average: an average session leaves the lake half gone. Until you have 5 sessions it uses a baseline of 146 Wh per session (the mean of the author's own logs), so the lake looks the same whichever rate you choose.
 
 ## Privacy
 
