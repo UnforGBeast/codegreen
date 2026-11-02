@@ -1,5 +1,7 @@
 # Freshwater
 
+**[unforgbeast.github.io/codegreen](https://unforgbeast.github.io/codegreen/)**
+
 A small floating 8-bit widget that makes the cost of AI coding visible. It reads the token counts your coding tools already log on this computer and shows an **estimate** of the freshwater used: this session, all time, and on average. A pixel lake dries up as a session uses tokens, and the fish crowd together and flop on the mud. They never die. The point is to feel responsible for the next prompt, not to feel bad.
 
 The widget stays on top of your other windows, can be dragged anywhere, and remembers where you left it.
