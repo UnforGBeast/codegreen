@@ -1,13 +1,14 @@
 const path = require('node:path');
-const { app, BrowserWindow, Menu, ipcMain, screen } = require('electron');
+const { app, BrowserWindow, Menu, dialog, ipcMain, screen } = require('electron');
 const { createAdapters } = require('../adapters');
 const { createTracker } = require('../core/tracker');
-const { loadSettings, saveSettings, withRatePreset } = require('../core/settings');
+const { loadSettings, saveSettings, withRatePreset, withAutoUpdate } = require('../core/settings');
 const { RATES } = require('../core/water');
 const { sceneState } = require('../core/lake');
 const { LEDGER_PATH, SETTINGS_PATH } = require('../core/paths');
 const { safePosition } = require('./position');
 const { loginItem } = require('./platform');
+const { createUpdates } = require('./updates');
 
 const WINDOW_SIZE = { width: 220, height: 240 };
 const TICK_MS = 3000;
@@ -16,6 +17,7 @@ const SAVE_DEBOUNCE_MS = 500;
 let win = null;
 let infoWin = null;
 let runTick = () => {};
+let updates = null;
 let settings = { ratePreset: 'default' };
 let lastSnapshot = null;
 
@@ -28,6 +30,18 @@ function persistSettings() {
   }
 }
 
+const UPDATE_MESSAGES = {
+  available: 'A newer version is available. It is downloading now and will install when you quit.',
+  current: 'You are on the latest version.',
+  unavailable: 'Update checks are not available in this build.',
+  error: 'The update check failed. Check your connection and try again.',
+};
+
+async function checkForUpdatesNow() {
+  const { state } = await updates.checkNow();
+  dialog.showMessageBox({ type: 'info', title: 'Freshwater', message: UPDATE_MESSAGES[state], buttons: ['OK'] });
+}
+
 function popupMenu() {
   const login = loginItem(process.platform, app.isPackaged);
   const items = [{ label: 'Info', click: () => openInfo() }];
@@ -38,6 +52,22 @@ function popupMenu() {
       checked: app.getLoginItemSettings().openAtLogin,
       click: (item) => app.setLoginItemSettings({ openAtLogin: item.checked }),
     });
+  }
+  if (updates && updates.available) {
+    items.push(
+      { type: 'separator' },
+      { label: 'Check for updates now', click: () => checkForUpdatesNow() },
+      {
+        label: 'Check for updates automatically (off by default)',
+        type: 'checkbox',
+        checked: settings.autoUpdate === true,
+        click: (item) => {
+          settings = withAutoUpdate(settings, item.checked);
+          persistSettings();
+          updates.setAuto(settings.autoUpdate);
+        },
+      }
+    );
   }
   items.push({ type: 'separator' }, { label: 'Quit', click: () => app.quit() });
   Menu.buildFromTemplate(items).popup({ window: win });
@@ -171,6 +201,12 @@ if (!app.requestSingleInstanceLock()) {
     });
     createWindow();
     startTracking();
+    // electron-updater is only loaded in a packaged build, so a dev checkout never touches it
+    updates = createUpdates({
+      updater: app.isPackaged ? require('electron-updater').autoUpdater : null,
+      isPackaged: app.isPackaged,
+    });
+    updates.setAuto(settings.autoUpdate === true);
   });
   app.on('window-all-closed', () => app.quit());
 }

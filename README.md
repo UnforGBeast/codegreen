@@ -25,6 +25,8 @@ npm install
 npm start
 ```
 
+**Downloads:** installers will be on the [Releases page](https://github.com/UnforGBeast/codegreen/releases). Releases are published only from signed builds, so if a release is not there yet, that is why. Maintainers: see [docs/releasing.md](docs/releasing.md).
+
 To build an installer for the system you are on, run `npm run dist` (Windows), `npm run dist:mac` (macOS) or `npm run dist:linux` (Linux). The result is written to `dist/`.
 
 Platform notes:
@@ -66,7 +68,7 @@ The lake level compares a session against your own average: an average session l
 
 ## Privacy
 
-Nothing leaves your computer. The widget makes no network calls, has no accounts or telemetry, and bundles its font. It reads only usage numbers and timestamps from the logs and never stores or shows conversation text. Per-session totals are kept in `~/.freshwater/ledger.json` so that all-time figures survive tools deleting old logs. Settings are in `~/.freshwater/settings.json`.
+By default nothing leaves your computer. The widget has no accounts or telemetry, bundles its font, and makes **no network requests** except one you can choose to allow: an update check that asks GitHub whether a newer release exists. It is **off by default**; in an installed copy, right-click the widget to check now or to switch on automatic checks. It reads only usage numbers and timestamps from the logs and never stores or shows conversation text. Per-session totals are kept in `~/.freshwater/ledger.json` so that all-time figures survive tools deleting old logs. Settings are in `~/.freshwater/settings.json`.
 
 The widget never limits or blocks token use.
 
