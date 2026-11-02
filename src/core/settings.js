@@ -10,6 +10,7 @@ function clean(obj) {
     s.x = obj.x;
     s.y = obj.y;
   }
+  if (typeof obj.autoUpdate === 'boolean') s.autoUpdate = obj.autoUpdate; // absent means off
   return s;
 }
 
@@ -27,4 +28,8 @@ function withRatePreset(settings, preset) {
   return { ...settings, ratePreset: preset };
 }
 
-module.exports = { loadSettings, saveSettings, withRatePreset };
+function withAutoUpdate(settings, enabled) {
+  return { ...settings, autoUpdate: Boolean(enabled) };
+}
+
+module.exports = { loadSettings, saveSettings, withRatePreset, withAutoUpdate };

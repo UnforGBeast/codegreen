@@ -1,6 +1,6 @@
 {
   "name": "freshwater-widget",
-  "version": "1.0.0",
+  "version": "0.1.0-beta.1",
   "description": "Floating 8-bit lake widget that turns local AI coding token logs into an estimated freshwater figure.",
   "main": "src/main/main.js",
   "scripts": {
@@ -8,7 +8,8 @@
     "test": "node --test \"test/*.test.js\"",
     "dist": "electron-builder --win",
     "dist:mac": "electron-builder --mac",
-    "dist:linux": "electron-builder --linux"
+    "dist:linux": "electron-builder --linux",
+    "builder": "electron-builder"
   },
   "keywords": [],
   "author": "UnforGBeast <atahusain123@gmail.com>",
@@ -22,15 +23,31 @@
     "appId": "com.freshwater.widget",
     "productName": "Freshwater",
     "directories": {
-      "output": "dist"
+      "output": "dist",
+      "buildResources": "build"
     },
     "files": [
       "src/**/*",
       "package.json"
     ],
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "UnforGBeast",
+        "repo": "codegreen"
+      }
+    ],
     "win": {
-      "target": "nsis",
-      "signAndEditExecutable": false
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "signAndEditExecutable": false,
+      "icon": "build/icon.png"
     },
     "nsis": {
       "oneClick": true,
@@ -38,18 +55,44 @@
     },
     "mac": {
       "target": [
-        "dmg"
+        {
+          "target": "dmg",
+          "arch": [
+            "x64",
+            "arm64"
+          ]
+        },
+        {
+          "target": "zip",
+          "arch": [
+            "x64",
+            "arm64"
+          ]
+        }
       ],
       "category": "public.app-category.developer-tools",
-      "identity": null
+      "hardenedRuntime": true,
+      "gatekeeperAssess": false,
+      "icon": "build/icon.png"
     },
     "linux": {
       "target": [
-        "AppImage",
-        "deb"
+        {
+          "target": "AppImage",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "deb",
+          "arch": [
+            "x64"
+          ]
+        }
       ],
       "category": "Utility",
-      "maintainer": "UnforGBeast <atahusain123@gmail.com>"
+      "maintainer": "UnforGBeast <atahusain123@gmail.com>",
+      "icon": "build/icon.png"
     }
   },
   "homepage": "https://github.com/UnforGBeast/codegreen",
@@ -59,5 +102,8 @@
   },
   "engines": {
     "node": ">=22"
+  },
+  "dependencies": {
+    "electron-updater": "^6.8.11"
   }
 }
