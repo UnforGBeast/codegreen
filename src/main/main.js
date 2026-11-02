@@ -2,7 +2,7 @@ const path = require('node:path');
 const { app, BrowserWindow, Menu, ipcMain, screen } = require('electron');
 const { createAdapters } = require('../adapters');
 const { createTracker } = require('../core/tracker');
-const { loadSettings, saveSettings } = require('../core/settings');
+const { loadSettings, saveSettings, withRatePreset } = require('../core/settings');
 const { RATES } = require('../core/water');
 const { sceneState } = require('../core/lake');
 const { LEDGER_PATH, SETTINGS_PATH } = require('../core/paths');
@@ -13,6 +13,8 @@ const TICK_MS = 3000;
 const SAVE_DEBOUNCE_MS = 500;
 
 let win = null;
+let infoWin = null;
+let runTick = () => {};
 let settings = { ratePreset: 'default' };
 let lastSnapshot = null;
 
@@ -31,8 +33,34 @@ function popupMenu() {
   menu.popup({ window: win });
 }
 
-// The info panel arrives with the next task; until then the menu item and row clicks do nothing.
-function openInfo() {}
+function openInfo() {
+  if (infoWin && !infoWin.isDestroyed()) {
+    infoWin.show();
+    infoWin.focus();
+    return;
+  }
+  infoWin = new BrowserWindow({
+    width: 480,
+    height: 640,
+    title: 'Freshwater info',
+    backgroundColor: '#0a0f1f',
+    autoHideMenuBar: true,
+    alwaysOnTop: true,
+    webPreferences: {
+      preload: path.join(__dirname, 'preload.js'),
+      contextIsolation: true,
+      nodeIntegration: false,
+    },
+  });
+  infoWin.setMenu(null);
+  infoWin.loadFile(path.join(__dirname, '..', 'renderer', 'info.html'));
+  infoWin.webContents.on('did-finish-load', () => {
+    if (lastSnapshot) infoWin.webContents.send('snapshot', lastSnapshot);
+  });
+  infoWin.on('closed', () => {
+    infoWin = null;
+  });
+}
 
 function displays() {
   const primaryId = screen.getPrimaryDisplay().id;
@@ -96,11 +124,12 @@ function startTracking() {
     try {
       const snapshot = tracker.tick();
       lastSnapshot = { ...snapshot, scene: sceneState(snapshot.level) };
-      if (win && !win.isDestroyed()) win.webContents.send('snapshot', lastSnapshot);
+      for (const w of [win, infoWin]) if (w && !w.isDestroyed()) w.webContents.send('snapshot', lastSnapshot);
     } catch {
       // a bad tick must never take the widget down; the next tick tries again
     }
   };
+  runTick = run;
   run();
   setInterval(run, TICK_MS);
 }
@@ -115,6 +144,16 @@ if (!app.requestSingleInstanceLock()) {
     settings = loadSettings(SETTINGS_PATH);
     ipcMain.on('open-menu', popupMenu);
     ipcMain.on('open-info', () => openInfo());
+    ipcMain.handle('get-rates', () => ({ rates: RATES, preset: settings.ratePreset }));
+    ipcMain.handle('set-rate-preset', (_event, preset) => {
+      const next = withRatePreset(settings, preset);
+      if (next !== settings) {
+        settings = next;
+        saveSettings(SETTINGS_PATH, settings);
+        runTick(); // refresh every figure now rather than at the next tick
+      }
+      return settings.ratePreset;
+    });
     createWindow();
     startTracking();
   });

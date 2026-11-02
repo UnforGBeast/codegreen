@@ -21,4 +21,10 @@ function saveSettings(filePath, settings) {
   writeJsonAtomic(filePath, clean(settings) || { ratePreset: 'default' });
 }
 
-module.exports = { loadSettings, saveSettings };
+// Returns the same object for an unknown preset, a new one otherwise.
+function withRatePreset(settings, preset) {
+  if (typeof preset !== 'string' || !Object.hasOwn(RATES, preset)) return settings;
+  return { ...settings, ratePreset: preset };
+}
+
+module.exports = { loadSettings, saveSettings, withRatePreset };

@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; font-src 'self'">
+<title>Freshwater info</title>
+<link rel="stylesheet" href="info.css">
+</head>
+<body>
+<h1>FRESHWATER</h1>
+<p class="lead">An <b>estimate</b> of the freshwater used by the AI tokens your coding tools have logged on this computer. Nothing leaves your machine.</p>
+
+<h2>Water rate</h2>
+<form id="rates">
+  <label><input type="radio" name="rate" value="low"><span><b>Low</b> &middot; 1.08 mL per Wh</span><small>Google's reported 0.26 mL and 0.24 Wh per median Gemini prompt. Critics say it leaves out indirect water.</small></label>
+  <label><input type="radio" name="rate" value="default"><span><b>Default</b> &middot; 1.8 mL per Wh</span><small>U.S. national average, as cited in Li et al., arXiv 2304.03271 (v1).</small></label>
+  <label><input type="radio" name="rate" value="high"><span><b>High</b> &middot; 3.8 mL per Wh</span><small>Average on-site efficiency for a comparison training site in the same preprint.</small></label>
+</form>
+
+<h2>How it is calculated</h2>
+<pre>weighted tokens = output x 1
+                + input x 0.1
+                + cache write x 0.1
+                + cache read x 0.001
+energy (Wh) = weighted tokens / 1000 x 0.6
+water (mL)  = energy (Wh) x water rate</pre>
+<p>The token weights are judgment values, not sourced figures: cached tokens are about 98% of Claude Code volume, so counting them in full would swamp everything else. The 0.6 Wh per 1,000 tokens comes from Epoch AI's estimate of about 0.3 Wh per ChatGPT query, assuming a 500-token response.</p>
+
+<h2>Sources</h2>
+<ul>
+  <li>Epoch AI, "How much energy does ChatGPT use?"</li>
+  <li>Li et al., "Making AI Less Thirsty", arXiv 2304.03271, version 1</li>
+  <li>Google's published per-prompt figures for a median Gemini text prompt</li>
+</ul>
+
+<h2>Tools</h2>
+<ul id="tools"></ul>
+<p class="note">A tool shown as not measured exposes no readable token counts, so it adds nothing to any figure. The widget never guesses.</p>
+
+<script src="info.js"></script>
+</body>
+</html>
