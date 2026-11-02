@@ -125,3 +125,17 @@ test('totals survive a restart from the saved ledger', () => {
   const empty = fake('claude-code', 'Claude Code', { status: 'measured', sessions: [] });
   assert.equal(mk([empty]).tick().allTimeMl, before);
 });
+
+test('a failing ledger save still yields a snapshot and is retried', () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'fw-tracker-'));
+  const blocker = path.join(dir, 'not-a-dir');
+  fs.writeFileSync(blocker, 'x'); // a file where the data folder should be, so every save fails
+  const ledgerPath = path.join(blocker, 'ledger.json');
+  const a = fake('claude-code', 'Claude Code', { status: 'measured', sessions: [rec('claude-code', 'a', 1000, 5)] });
+  const tracker = createTracker({ adapters: [a], ledgerPath, getRate: () => RATES.default, now: () => 10 });
+  const snap = tracker.tick();
+  assert.equal(snap.session.ml, waterMl(usage(1000), RATES.default));
+  fs.rmSync(blocker);
+  tracker.tick(); // the folder is now creatable: the unsaved ledger is written without any new usage
+  assert.ok(fs.existsSync(ledgerPath));
+});

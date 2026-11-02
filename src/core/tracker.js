@@ -8,6 +8,8 @@ function createTracker({ adapters, ledgerPath, getRate, now }) {
   const ledger = loadLedger(ledgerPath); // rebuilt from logs on the first ticks if it was corrupt
   const status = new Map(adapters.map((a) => [a.tool, 'not-measured']));
 
+  let unsaved = false; // stays set until a save succeeds, so a failed write is retried
+
   function tick() {
     let changed = false;
     for (const adapter of adapters) {
@@ -20,7 +22,15 @@ function createTracker({ adapters, ledgerPath, getRate, now }) {
       status.set(adapter.tool, result.status);
       if (mergeSessions(ledger, result.sessions)) changed = true;
     }
-    if (changed) saveLedger(ledgerPath, ledger);
+    if (changed) unsaved = true;
+    if (unsaved) {
+      try {
+        saveLedger(ledgerPath, ledger);
+        unsaved = false;
+      } catch {
+        // unwritable data folder: keep showing figures from memory and try again next tick
+      }
+    }
 
     const rate = getRate();
     const records = Object.values(ledger.sessions);

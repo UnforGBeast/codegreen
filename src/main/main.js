@@ -18,6 +18,15 @@ let runTick = () => {};
 let settings = { ratePreset: 'default' };
 let lastSnapshot = null;
 
+// A settings file that cannot be written must never raise an uncaught error in the main process.
+function persistSettings() {
+  try {
+    saveSettings(SETTINGS_PATH, settings);
+  } catch {
+    // the choice still applies for this run
+  }
+}
+
 function popupMenu() {
   const menu = Menu.buildFromTemplate([
     { label: 'Info', click: () => openInfo() },
@@ -105,7 +114,7 @@ function createWindow() {
       if (!win || win.isDestroyed()) return;
       const [x, y] = win.getPosition();
       settings = { ...settings, x, y };
-      saveSettings(SETTINGS_PATH, settings);
+      persistSettings();
     }, SAVE_DEBOUNCE_MS);
   });
   win.on('closed', () => {
@@ -149,7 +158,7 @@ if (!app.requestSingleInstanceLock()) {
       const next = withRatePreset(settings, preset);
       if (next !== settings) {
         settings = next;
-        saveSettings(SETTINGS_PATH, settings);
+        persistSettings();
         runTick(); // refresh every figure now rather than at the next tick
       }
       return settings.ratePreset;
