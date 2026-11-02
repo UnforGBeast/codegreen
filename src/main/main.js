@@ -7,6 +7,7 @@ const { RATES } = require('../core/water');
 const { sceneState } = require('../core/lake');
 const { LEDGER_PATH, SETTINGS_PATH } = require('../core/paths');
 const { safePosition } = require('./position');
+const { loginItem } = require('./platform');
 
 const WINDOW_SIZE = { width: 220, height: 240 };
 const TICK_MS = 3000;
@@ -28,18 +29,18 @@ function persistSettings() {
 }
 
 function popupMenu() {
-  const menu = Menu.buildFromTemplate([
-    { label: 'Info', click: () => openInfo() },
-    {
-      label: 'Start with Windows',
+  const login = loginItem(process.platform, app.isPackaged);
+  const items = [{ label: 'Info', click: () => openInfo() }];
+  if (login) {
+    items.push({
+      label: login.label,
       type: 'checkbox',
       checked: app.getLoginItemSettings().openAtLogin,
       click: (item) => app.setLoginItemSettings({ openAtLogin: item.checked }),
-    },
-    { type: 'separator' },
-    { label: 'Quit', click: () => app.quit() },
-  ]);
-  menu.popup({ window: win });
+    });
+  }
+  items.push({ type: 'separator' }, { label: 'Quit', click: () => app.quit() });
+  Menu.buildFromTemplate(items).popup({ window: win });
 }
 
 function openInfo() {
@@ -95,6 +96,10 @@ function createWindow() {
     },
   });
   win.setAlwaysOnTop(true, 'screen-saver');
+  if (process.platform === 'darwin') {
+    // no Dock icon, and visible over fullscreen apps and on every desktop
+    win.setVisibleOnAllWorkspaces(true, { visibleOnFullScreen: true });
+  }
   win.loadFile(path.join(__dirname, '..', 'renderer', 'widget.html'));
   win.once('ready-to-show', () => win.show());
   win.webContents.on('did-finish-load', () => {
@@ -150,6 +155,7 @@ if (!app.requestSingleInstanceLock()) {
     if (win) win.show();
   });
   app.whenReady().then(() => {
+    if (process.platform === 'darwin') app.dock.hide();
     settings = loadSettings(SETTINGS_PATH);
     ipcMain.on('open-menu', popupMenu);
     ipcMain.on('open-info', () => openInfo());
