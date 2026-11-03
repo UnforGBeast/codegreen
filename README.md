@@ -80,9 +80,13 @@ The widget never limits or blocks token use.
 npm test
 ```
 
-The calculation and log parsing live in `src/core` and `src/adapters` and are tested with plain Node, with no Electron needed. Fixtures contain no real conversation text. To add a tool, write an adapter with a `scan()` that returns `{status, sessions}` and register it in `src/adapters/index.js`.
+The calculation and log parsing live in `src/core` and `src/adapters` and are tested with plain Node, with no Electron needed. Fixtures contain no real conversation text. To add a tool, follow [the adapter guide](CONTRIBUTING.md#adding-a-tool).
 
 The Press Start 2P font is bundled under the SIL Open Font License; see `src/renderer/FONT-LICENSE.txt`.
+
+## Contributing
+
+Contributions are welcome, and many need no code: checking the widget on your system, or finding out what another tool logs, helps just as much. Start with [CONTRIBUTING.md](CONTRIBUTING.md). Please also read the [code of conduct](CODE_OF_CONDUCT.md), and report security problems as described in [SECURITY.md](SECURITY.md).
 
 ## License
 

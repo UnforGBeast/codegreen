@@ -1,0 +1,41 @@
+name: Challenge a number
+description: Propose a better figure for the estimate, with its source.
+labels: [trust]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        [docs/methodology.md](https://github.com/UnforGBeast/codegreen/blob/main/docs/methodology.md) explains where each number comes from and how sure we are of it.
+  - type: dropdown
+    id: figure
+    attributes:
+      label: Which number
+      options:
+        - Token weights
+        - Energy per token
+        - Water rate presets
+        - Lake baseline
+        - Something else
+    validations:
+      required: true
+  - type: input
+    id: proposed
+    attributes:
+      label: The figure you suggest
+      placeholder: 0.4 Wh per 1,000 tokens
+    validations:
+      required: true
+  - type: textarea
+    id: source
+    attributes:
+      label: Source
+      description: A link to the paper or data, and where in it the figure appears.
+    validations:
+      required: true
+  - type: textarea
+    id: reasoning
+    attributes:
+      label: Why it is better
+      description: Include any limits of the source, and which way it would move the estimate.
+    validations:
+      required: true

@@ -1,0 +1,58 @@
+name: Measure another tool
+description: Report what a coding tool stores locally, so it can be added or recorded as not measured.
+labels: [enhancement, adapter]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Never paste real log content.** Field names, types and token numbers are all that is needed. Replace anything else with a placeholder. A finding of "no readable token counts" is useful too, because the tool can then stay honestly not measured.
+  - type: input
+    id: tool
+    attributes:
+      label: Tool and version
+      placeholder: Example CLI 1.4.0
+    validations:
+      required: true
+  - type: input
+    id: location
+    attributes:
+      label: Where it stores data
+      placeholder: ~/.example/sessions/**/*.jsonl
+    validations:
+      required: true
+  - type: dropdown
+    id: counts
+    attributes:
+      label: Does it record token counts for each request?
+      options:
+        - "Yes, with an input and output split"
+        - "Yes, but only a total"
+        - "No"
+        - "I do not know"
+    validations:
+      required: true
+  - type: textarea
+    id: fields
+    attributes:
+      label: Field names
+      description: One sanitized record showing the shape, with conversation text removed.
+      render: json
+      placeholder: '{ "id": "abc", "timestamp": "2026-11-02T10:00:00Z", "usage": { "input": 1200, "output": 300 } }'
+    validations:
+      required: false
+  - type: dropdown
+    id: verify
+    attributes:
+      label: Can you test an adapter against a real install?
+      options:
+        - "Yes"
+        - "No"
+    validations:
+      required: true
+  - type: checkboxes
+    id: sanitized
+    attributes:
+      label: Before you submit
+      options:
+        - label: This issue contains no conversation text, file contents or other private log content.
+          required: true
