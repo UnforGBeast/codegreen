@@ -1,0 +1,81 @@
+name: Bug report
+description: Something in the widget or the info panel does not work.
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Please do not paste conversation text from your logs.** Field names, token counts and timestamps are enough.
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Start the widget
+        2. Right-click the lake
+        3. ...
+    validations:
+      required: true
+  - type: dropdown
+    id: os
+    attributes:
+      label: Operating system
+      options:
+        - Windows
+        - macOS
+        - Linux
+    validations:
+      required: true
+  - type: input
+    id: os-version
+    attributes:
+      label: Operating system version
+      placeholder: Windows 11 24H2, macOS 15, Ubuntu 24.04 with Wayland
+    validations:
+      required: false
+  - type: dropdown
+    id: install
+    attributes:
+      label: How you run it
+      options:
+        - Installed build
+        - npm start from a checkout
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Version or commit
+    validations:
+      required: true
+  - type: dropdown
+    id: tools
+    attributes:
+      label: Tools you use
+      multiple: true
+      options:
+        - Claude Code
+        - Codex
+        - Gemini CLI
+        - Another tool
+    validations:
+      required: false
+  - type: textarea
+    id: extra
+    attributes:
+      label: Anything else
+      description: Screenshots help. They show your water figures, so crop them if you prefer.
+    validations:
+      required: false
