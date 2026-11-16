@@ -266,7 +266,9 @@ jobs:
   release:
     name: Draft release
     needs: [plan, build]
-    if: ${{ needs.plan.outputs.dry_run == 'false' && (github.ref_type == 'tag' || needs.plan.outputs.unsigned == 'true') && needs.build.result == 'success' }}
+    # !cancelled() is needed: the signing gate is skipped on an unsigned beta, and a skipped
+    # ancestor would otherwise skip this job too
+    if: ${{ !cancelled() && needs.plan.outputs.dry_run == 'false' && (github.ref_type == 'tag' || needs.plan.outputs.unsigned == 'true') && needs.build.result == 'success' }}
     runs-on: ubuntu-latest
     permissions:
       contents: write
