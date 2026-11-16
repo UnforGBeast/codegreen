@@ -4,11 +4,11 @@ Freshwater reads local log files from your AI coding tools, so the things that m
 
 ## Supported versions
 
-Freshwater is pre-release and has no published release yet. Reports are accepted against `main` and, once releases exist, the latest release.
+Freshwater is pre-release. Reports are accepted against `main` and the latest release.
 
 ## Reporting a vulnerability
 
-**Please do not open a public issue.** Email **atahusain123@gmail.com** with the subject `Freshwater security`, and include:
+**Please do not open a public issue.** Use GitHub's private reporting: open the repository's **Security** tab and choose **Report a vulnerability**. If you cannot use GitHub, email **atahusain123@gmail.com** with the subject `Freshwater security`. Either way, include:
 
 - what the problem is and what an attacker could do with it
 - steps to reproduce it
