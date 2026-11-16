@@ -18,6 +18,17 @@ Everything below is already built. What is left is a one-time account setup and 
 
 Pull requests that touch the release files, and manual runs with **Dry run** ticked, build the same installers **unsigned** and publish nothing. That is how the pipeline is kept honest without credentials.
 
+## Unsigned beta (until signing is set up)
+
+The signed-only rule applies to every tag push. While there is no certificate, one explicit exception exists: the **Release** workflow run by hand from the Actions tab on `main` with **Dry run unticked** and **Unsigned beta** ticked.
+
+- It only accepts a pre-release version (a hyphen, like `0.1.0-beta.1`) and only runs on `main`.
+- It builds **Windows and Linux only**. macOS is left out, because an unsigned, un-notarized app is blocked by Gatekeeper.
+- It publishes a **draft pre-release** titled "unsigned beta" with SHA-256 checksums. You read it and press Publish.
+- Windows shows an unknown-publisher (SmartScreen) warning on install. The release notes say so.
+
+Once signing credentials exist, tag a signed release as described above.
+
 ## One-time setup
 
 ### Windows: Azure Artifact Signing (recommended)
